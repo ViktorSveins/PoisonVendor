@@ -307,11 +307,20 @@ local function UpdateRow(row, rowData, isLast)
 	row.divider:SetShown(not isLast)
 end
 
+local function UpdateCollapseButtonPosition(panel)
+	panel.collapseButton:ClearAllPoints()
+	if panel.collapsed then
+		panel.collapseButton:SetPoint("TOPLEFT", MerchantFrame, "TOPRIGHT", -MF_RIGHT_OVERLAP, -20)
+	else
+		panel.collapseButton:SetPoint("TOPLEFT", panel, "TOPRIGHT", -6, -20)
+	end
+end
+
 local function SetPanelCollapsed(panel, collapsed)
 	panel.collapsed = collapsed
 
 	if collapsed then
-		panel.collapseButton.text:SetText(">")
+		panel.collapseButton.arrow:SetText(">")
 		for _, row in ipairs(panel.rows) do
 			row:Hide()
 		end
@@ -319,12 +328,14 @@ local function SetPanelCollapsed(panel, collapsed)
 		panel.border:Hide()
 		panel:SetSize(1, 1)
 	else
-		panel.collapseButton.text:SetText("<")
+		panel.collapseButton.arrow:SetText("<")
 		panel.content:Show()
 		panel.border:Show()
 		panel:SetWidth(PANEL_WIDTH)
 		PoisonVendor.RefreshCurrentRows()
 	end
+
+	UpdateCollapseButtonPosition(panel)
 end
 
 local function EnsurePanel()
@@ -366,42 +377,43 @@ local function EnsurePanel()
 
 	panel.title = nil
 
-	-- Collapse button anchored outside the frame on the right
+	-- Collapse button anchored to MerchantFrame so it stays put when panel collapses
 	panel.collapsed = false
 
-	panel.collapseButton = CreateFrame("Button", nil, panel)
-	panel.collapseButton:SetSize(18, 48)
-	panel.collapseButton:SetPoint("TOPLEFT", panel, "TOPRIGHT", -2, -16)
-
-	panel.collapseButton.bg = panel.collapseButton:CreateTexture(nil, "BACKGROUND")
-	panel.collapseButton.bg:SetAllPoints()
-	panel.collapseButton.bg:SetColorTexture(0.15, 0.12, 0.08, 0.85)
+	panel.collapseButton = CreateFrame("Button", nil, UIParent)
+	panel.collapseButton:SetSize(24, 48)
+	panel.collapseButton:SetFrameStrata(panel:GetFrameStrata())
+	panel.collapseButton:SetFrameLevel(panel:GetFrameLevel() - 1)
 
 	panel.collapseButton.borderFrame = CreateFrame("Frame", nil, panel.collapseButton, BackdropTemplateMixin and "BackdropTemplate" or nil)
 	if panel.collapseButton.borderFrame.SetBackdrop then
 		panel.collapseButton.borderFrame:SetAllPoints()
 		panel.collapseButton.borderFrame:SetBackdrop({
+			bgFile = "Interface\\FrameGeneral\\UI-Background-Marble",
 			edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
-			edgeSize = 10,
+			tile = true,
+			tileSize = 32,
+			edgeSize = 16,
+			insets = { left = 4, right = 4, top = 4, bottom = 4 },
 		})
-		panel.collapseButton.borderFrame:SetBackdropBorderColor(0.5, 0.45, 0.35, 0.8)
+		panel.collapseButton.borderFrame:SetBackdropColor(1, 1, 1, 1)
+		panel.collapseButton.borderFrame:SetBackdropBorderColor(0.7, 0.7, 0.7, 1)
 	end
 
-	panel.collapseButton.text = panel.collapseButton:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-	panel.collapseButton.text:SetPoint("CENTER", 0, 0)
-	panel.collapseButton.text:SetText("<")
-	panel.collapseButton.text:SetTextColor(0.6, 0.5, 0.35)
+	panel.collapseButton:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square", "ADD")
+	panel.collapseButton:GetHighlightTexture():SetAlpha(0.2)
 
-	panel.collapseButton.highlight = panel.collapseButton:CreateTexture(nil, "HIGHLIGHT")
-	panel.collapseButton.highlight:SetAllPoints()
-	panel.collapseButton.highlight:SetColorTexture(1, 1, 1, 0.06)
+	panel.collapseButton.arrow = (panel.collapseButton.borderFrame or panel.collapseButton):CreateFontString(nil, "OVERLAY", "GameFontNormal")
+	panel.collapseButton.arrow:SetPoint("CENTER", 0, 0)
+	panel.collapseButton.arrow:SetText("<")
+	panel.collapseButton.arrow:SetTextColor(0.85, 0.8, 0.65)
 
 	panel.collapseButton:SetScript("OnEnter", function(self)
-		self.text:SetTextColor(1, 0.82, 0)
+		self.arrow:SetTextColor(1, 0.95, 0.8)
 	end)
 
 	panel.collapseButton:SetScript("OnLeave", function(self)
-		self.text:SetTextColor(0.6, 0.5, 0.35)
+		self.arrow:SetTextColor(0.85, 0.8, 0.65)
 	end)
 
 	panel.collapseButton:SetScript("OnClick", function()
@@ -424,6 +436,9 @@ function PoisonVendor.HideVendorPanel()
 	end
 
 	panel:Hide()
+	if panel.collapseButton then
+		panel.collapseButton:Hide()
+	end
 end
 
 function PoisonVendor.RenderVendorPanel(rows)
@@ -442,6 +457,8 @@ function PoisonVendor.RenderVendorPanel(rows)
 	panel:SetPoint("TOPLEFT", MerchantFrame, "TOPRIGHT", -MF_RIGHT_OVERLAP, 0)
 	panel:SetParent(UIParent)
 	panel:Show()
+	panel.collapseButton:Show()
+	UpdateCollapseButtonPosition(panel)
 
 	if panel.collapsed then
 		return
