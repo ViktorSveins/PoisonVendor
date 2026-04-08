@@ -1,0 +1,12 @@
+## Interface: 20505
+## Title: PoisonVendor
+## Notes: Adds poison reagent batch buying to poison vendors
+## Author: Viktor
+## Version: 0.1.0
+
+PoisonVendor.lua
+Data\PoisonCatalog.lua
+Features\PoisonKnowledge.lua
+Features\MerchantScanner.lua
+Features\PurchaseLogic.lua
+UI\VendorPanel.lua
