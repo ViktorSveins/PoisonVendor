@@ -1,5 +1,5 @@
 # PoisonVendor
-![CurseForge](https://cf.way2muchnoise.eu/title/1508583.svg)
+[![CurseForge](https://cf.way2muchnoise.eu/1508583.svg?badge_style=for_the_badge)](https://www.curseforge.com/wow/addons/poisonvendor)
 
 Bulk-buy poison reagents from any poison supplier in one click. Built for **WoW TBC Classic Anniversary (2.5.5)**.
 
