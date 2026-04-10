@@ -1,4 +1,6 @@
 # PoisonVendor
+![CurseForge](https://cf.way2muchnoise.eu/title/1508583.svg)
+![WoW Version](https://img.shields.io/badge/WoW-TBC%20Anniversary%202.5.5-yellow)
 
 Bulk-buy poison reagents from any poison supplier in one click. Built for **WoW TBC Classic Anniversary (2.5.5)**.
 
