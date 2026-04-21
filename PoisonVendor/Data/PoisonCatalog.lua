@@ -11,7 +11,7 @@ PoisonVendor.PoisonCatalog = {
 			{
 				spellID = 8681,
 				itemID = 6947,
-				outputCount = 5,
+				outputCount = 1,
 				reagents = {
 					{ itemID = 2928, count = 1 },
 					{ itemID = 3371, count = 1 },
@@ -20,7 +20,7 @@ PoisonVendor.PoisonCatalog = {
 			{
 				spellID = 8687,
 				itemID = 6949,
-				outputCount = 5,
+				outputCount = 1,
 				reagents = {
 					{ itemID = 2928, count = 1 },
 					{ itemID = 3372, count = 1 },
@@ -29,7 +29,7 @@ PoisonVendor.PoisonCatalog = {
 			{
 				spellID = 8691,
 				itemID = 6950,
-				outputCount = 5,
+				outputCount = 1,
 				reagents = {
 					{ itemID = 8924, count = 2 },
 					{ itemID = 3372, count = 1 },
@@ -38,7 +38,7 @@ PoisonVendor.PoisonCatalog = {
 			{
 				spellID = 11341,
 				itemID = 8926,
-				outputCount = 5,
+				outputCount = 1,
 				reagents = {
 					{ itemID = 8924, count = 1 },
 					{ itemID = 8925, count = 1 },
@@ -47,7 +47,7 @@ PoisonVendor.PoisonCatalog = {
 			{
 				spellID = 11342,
 				itemID = 8927,
-				outputCount = 5,
+				outputCount = 1,
 				reagents = {
 					{ itemID = 8924, count = 2 },
 					{ itemID = 8925, count = 1 },
@@ -56,7 +56,7 @@ PoisonVendor.PoisonCatalog = {
 			{
 				spellID = 11343,
 				itemID = 8928,
-				outputCount = 5,
+				outputCount = 1,
 				reagents = {
 					{ itemID = 8924, count = 2 },
 					{ itemID = 8925, count = 1 },
@@ -65,7 +65,7 @@ PoisonVendor.PoisonCatalog = {
 			{
 				spellID = 26892,
 				itemID = 21927,
-				outputCount = 5,
+				outputCount = 1,
 				reagents = {
 					{ itemID = 2931, count = 1 },
 					{ itemID = 8925, count = 1 },
@@ -81,7 +81,7 @@ PoisonVendor.PoisonCatalog = {
 			{
 				spellID = 2835,
 				itemID = 2892,
-				outputCount = 5,
+				outputCount = 1,
 				reagents = {
 					{ itemID = 5173, count = 1 },
 					{ itemID = 3372, count = 1 },
@@ -90,7 +90,7 @@ PoisonVendor.PoisonCatalog = {
 			{
 				spellID = 2837,
 				itemID = 2893,
-				outputCount = 5,
+				outputCount = 1,
 				reagents = {
 					{ itemID = 5173, count = 2 },
 					{ itemID = 3372, count = 1 },
@@ -99,7 +99,7 @@ PoisonVendor.PoisonCatalog = {
 			{
 				spellID = 11357,
 				itemID = 8984,
-				outputCount = 5,
+				outputCount = 1,
 				reagents = {
 					{ itemID = 5173, count = 1 },
 					{ itemID = 8925, count = 1 },
@@ -108,7 +108,7 @@ PoisonVendor.PoisonCatalog = {
 			{
 				spellID = 11358,
 				itemID = 8985,
-				outputCount = 5,
+				outputCount = 1,
 				reagents = {
 					{ itemID = 5173, count = 2 },
 					{ itemID = 8925, count = 1 },
@@ -117,7 +117,7 @@ PoisonVendor.PoisonCatalog = {
 			{
 				spellID = 25347,
 				itemID = 20844,
-				outputCount = 5,
+				outputCount = 1,
 				reagents = {
 					{ itemID = 5173, count = 2 },
 					{ itemID = 8925, count = 1 },
@@ -126,7 +126,7 @@ PoisonVendor.PoisonCatalog = {
 			{
 				spellID = 26969,
 				itemID = 22053,
-				outputCount = 5,
+				outputCount = 1,
 				reagents = {
 					{ itemID = 2931, count = 1 },
 					{ itemID = 8925, count = 1 },
@@ -135,7 +135,7 @@ PoisonVendor.PoisonCatalog = {
 			{
 				spellID = 27282,
 				itemID = 22054,
-				outputCount = 5,
+				outputCount = 1,
 				reagents = {
 					{ itemID = 2931, count = 1 },
 					{ itemID = 8925, count = 1 },
@@ -151,7 +151,7 @@ PoisonVendor.PoisonCatalog = {
 			{
 				spellID = 3420,
 				itemID = 3775,
-				outputCount = 5,
+				outputCount = 1,
 				reagents = {
 					{ itemID = 2930, count = 1 },
 					{ itemID = 3371, count = 1 },
@@ -160,7 +160,7 @@ PoisonVendor.PoisonCatalog = {
 			{
 				spellID = 3421,
 				itemID = 3776,
-				outputCount = 5,
+				outputCount = 1,
 				reagents = {
 					{ itemID = 8923, count = 1 },
 					{ itemID = 8925, count = 1 },
@@ -176,7 +176,7 @@ PoisonVendor.PoisonCatalog = {
 			{
 				spellID = 5763,
 				itemID = 5237,
-				outputCount = 5,
+				outputCount = 1,
 				reagents = {
 					{ itemID = 2928, count = 1 },
 					{ itemID = 3371, count = 1 },
@@ -185,7 +185,7 @@ PoisonVendor.PoisonCatalog = {
 			{
 				spellID = 8694,
 				itemID = 6951,
-				outputCount = 5,
+				outputCount = 1,
 				reagents = {
 					{ itemID = 8923, count = 1 },
 					{ itemID = 3372, count = 1 },
@@ -194,7 +194,7 @@ PoisonVendor.PoisonCatalog = {
 			{
 				spellID = 11400,
 				itemID = 9186,
-				outputCount = 5,
+				outputCount = 1,
 				reagents = {
 					{ itemID = 8923, count = 1 },
 					{ itemID = 8925, count = 1 },
@@ -210,7 +210,7 @@ PoisonVendor.PoisonCatalog = {
 			{
 				spellID = 13220,
 				itemID = 10918,
-				outputCount = 5,
+				outputCount = 1,
 				reagents = {
 					{ itemID = 2930, count = 1 },
 					{ itemID = 3372, count = 1 },
@@ -219,7 +219,7 @@ PoisonVendor.PoisonCatalog = {
 			{
 				spellID = 13228,
 				itemID = 10920,
-				outputCount = 5,
+				outputCount = 1,
 				reagents = {
 					{ itemID = 2930, count = 1 },
 					{ itemID = 5173, count = 1 },
@@ -229,7 +229,7 @@ PoisonVendor.PoisonCatalog = {
 			{
 				spellID = 13229,
 				itemID = 10921,
-				outputCount = 5,
+				outputCount = 1,
 				reagents = {
 					{ itemID = 8923, count = 1 },
 					{ itemID = 8925, count = 1 },
@@ -238,7 +238,7 @@ PoisonVendor.PoisonCatalog = {
 			{
 				spellID = 13230,
 				itemID = 10922,
-				outputCount = 5,
+				outputCount = 1,
 				reagents = {
 					{ itemID = 8923, count = 1 },
 					{ itemID = 5173, count = 1 },
@@ -248,7 +248,7 @@ PoisonVendor.PoisonCatalog = {
 			{
 				spellID = 27283,
 				itemID = 22055,
-				outputCount = 5,
+				outputCount = 1,
 				reagents = {
 					{ itemID = 8923, count = 2 },
 					{ itemID = 8925, count = 1 },
@@ -264,7 +264,7 @@ PoisonVendor.PoisonCatalog = {
 			{
 				spellID = 26786,
 				itemID = 21835,
-				outputCount = 5,
+				outputCount = 1,
 				reagents = {
 					{ itemID = 2931, count = 1 },
 					{ itemID = 5173, count = 1 },
