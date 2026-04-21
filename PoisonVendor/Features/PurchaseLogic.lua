@@ -121,21 +121,32 @@ function PoisonVendor.ExecutePurchasePlan(plan)
 	return true
 end
 
-function PoisonVendor.BuildPurchasePlan(rank, merchantMap, batchSize)
+function PoisonVendor.BuildPurchasePlan(rank, merchantMap, batchSize, existingOutput, exactQuantity)
 	if type(rank) ~= "table" or type(merchantMap) ~= "table" then
 		return nil
 	end
 
-	local combineMultiplier = PoisonVendor.GetCombineMultiplierForBatch(batchSize)
-	if not combineMultiplier then
+	local targetOutput = tonumber(batchSize or 0) or 0
+	if not BATCH_TO_COMBINES[targetOutput] then
 		return nil
 	end
 
 	local outputCount = tonumber(rank.outputCount or 0) or 0
-	local totalOutput = outputCount * combineMultiplier
+	if outputCount <= 0 then
+		return nil
+	end
+
+	local existing = math.max(0, tonumber(existingOutput or 0) or 0)
+	local missingOutput = targetOutput - existing
+	if missingOutput <= 0 then
+		return nil
+	end
+
+	local effectiveCombines = math.ceil(missingOutput / outputCount)
+	local totalOutput = outputCount * effectiveCombines
 	local plan = {
 		batchSize = batchSize,
-		combineMultiplier = combineMultiplier,
+		combineMultiplier = effectiveCombines,
 		outputCount = outputCount,
 		totalOutput = totalOutput,
 		totalCost = 0,
@@ -150,8 +161,13 @@ function PoisonVendor.BuildPurchasePlan(rank, merchantMap, batchSize)
 		end
 
 		local bundleSize = NormalizeMerchantBundleSize(merchantLine.quantity)
-		local requiredUnits = reagent.count * combineMultiplier
-		local purchaseQuantity = NormalizeMerchantPurchaseQuantity(requiredUnits, bundleSize)
+		local requiredUnits = reagent.count * effectiveCombines
+		local purchaseQuantity
+		if exactQuantity then
+			purchaseQuantity = requiredUnits
+		else
+			purchaseQuantity = NormalizeMerchantPurchaseQuantity(requiredUnits, bundleSize)
+		end
 		local purchaseCount = purchaseQuantity / bundleSize
 		local purchasedUnits = purchaseQuantity
 		local numAvailable = merchantLine.numAvailable
