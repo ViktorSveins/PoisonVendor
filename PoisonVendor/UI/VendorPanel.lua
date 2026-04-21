@@ -105,9 +105,21 @@ local function CreateBatchButton(parent, batchSize)
 	button:SetText(("x%d"):format(batchSize))
 	button:RegisterForClicks("LeftButtonUp", "RightButtonUp")
 
-	button:SetScript("OnClick", function(self)
-		if self.plan then
-			TryExecutePlan(self.plan)
+	button:SetScript("OnClick", function(self, mouseButton)
+		local pair = self.plan
+		if type(pair) ~= "table" then
+			return
+		end
+
+		local chosen
+		if mouseButton == "RightButton" then
+			chosen = pair.delta
+		else
+			chosen = pair.full
+		end
+
+		if chosen then
+			TryExecutePlan(chosen)
 		end
 	end)
 
@@ -119,11 +131,15 @@ local function CreateBatchButton(parent, batchSize)
 		GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT")
 		GameTooltip:SetText(("Buy x%d"):format(self.batchSize), 1, 1, 1)
 
-		if self.plan then
-			GameTooltip:AddDoubleLine("Output", ("x%d"):format(self.plan.totalOutput or self.batchSize), 0.8, 0.8, 0.8, 1, 1, 1)
-			GameTooltip:AddDoubleLine("Cost", GetCoinText(self.plan.totalCost), 0.8, 0.8, 0.8, 1, 1, 1)
+		local pair = self.plan
+		local fullPlan = pair and pair.full or nil
+		local deltaPlan = pair and pair.delta or nil
 
-			local reagentLines = GetPlanReagentLines(self.plan)
+		if fullPlan then
+			GameTooltip:AddDoubleLine("Output", ("x%d"):format(fullPlan.totalOutput or self.batchSize), 0.8, 0.8, 0.8, 1, 1, 1)
+			GameTooltip:AddDoubleLine("Cost", GetCoinText(fullPlan.totalCost), 0.8, 0.8, 0.8, 1, 1, 1)
+
+			local reagentLines = GetPlanReagentLines(fullPlan)
 			if #reagentLines > 0 then
 				GameTooltip:AddLine(" ")
 				GameTooltip:AddLine("Reagents", 0.8, 0.8, 0.8)
@@ -132,9 +148,21 @@ local function CreateBatchButton(parent, batchSize)
 				end
 			end
 
-			if not self.plan.available then
+			if not fullPlan.available then
 				GameTooltip:AddLine(" ")
 				GameTooltip:AddLine("Unavailable at this vendor.", 1, 0.2, 0.2, true)
+			end
+
+			GameTooltip:AddLine(" ")
+			if deltaPlan then
+				GameTooltip:AddLine("Right-click: top up to this batch", 0.6, 0.85, 1)
+				GameTooltip:AddDoubleLine("  Output", ("x%d"):format(deltaPlan.totalOutput or 0), 0.8, 0.8, 0.8, 1, 1, 1)
+				GameTooltip:AddDoubleLine("  Cost", GetCoinText(deltaPlan.totalCost), 0.8, 0.8, 0.8, 1, 1, 1)
+				if not deltaPlan.available then
+					GameTooltip:AddLine("  Unavailable at this vendor.", 1, 0.2, 0.2, true)
+				end
+			else
+				GameTooltip:AddLine("Right-click: already stocked", 0.6, 0.85, 1)
 			end
 		else
 			GameTooltip:AddLine("No purchase plan available.", 1, 0.2, 0.2, true)
@@ -294,10 +322,11 @@ local function UpdateRow(row, rowData, isLast)
 	local batchSizes = GetBatchSizes()
 	for index, batchSize in ipairs(batchSizes) do
 		local button = row.buttons[index]
-		local plan = rowData.batchPlans and rowData.batchPlans[batchSize] or nil
-		local enabled = IsPlanAvailable(plan)
+		local pair = rowData.batchPlans and rowData.batchPlans[batchSize] or nil
+		local fullPlan = pair and pair.full or nil
+		local enabled = IsPlanAvailable(fullPlan)
 
-		button.plan = plan
+		button.plan = pair
 		button:SetText(("x%d"):format(batchSize))
 		button:SetEnabled(enabled)
 		button:SetAlpha(enabled and 1 or 0.45)

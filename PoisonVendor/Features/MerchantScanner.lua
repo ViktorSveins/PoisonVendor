@@ -10,6 +10,13 @@ local function GetItemIDFromLink(itemLink)
 	return tonumber(itemLink:match("item:(%d+)"))
 end
 
+local function GetBagCount(itemID)
+	if type(GetItemCount) == "function" and itemID then
+		return tonumber(GetItemCount(itemID)) or 0
+	end
+	return 0
+end
+
 function PoisonVendor.BuildMerchantMap()
 	local merchantMap = {}
 	local itemCount = GetMerchantNumItems and GetMerchantNumItems() or 0
@@ -41,13 +48,17 @@ local selectedRanks = {}
 
 local function BuildRowForRank(familyKey, family, rank, rankIndex, allRanks, merchantMap, batchSizes)
 	local batchPlans = {}
+	local existingOutput = GetBagCount(rank.itemID)
 
 	for _, batchSize in ipairs(batchSizes) do
-		batchPlans[batchSize] = PoisonVendor.BuildPurchasePlan(rank, merchantMap, batchSize)
+		local full = PoisonVendor.BuildPurchasePlan(rank, merchantMap, batchSize)
+		local delta = PoisonVendor.BuildPurchasePlan(rank, merchantMap, batchSize, existingOutput, true)
+		batchPlans[batchSize] = { full = full, delta = delta }
 	end
 
 	local defaultBatchSize = batchSizes[1]
-	local defaultPlan = batchPlans[defaultBatchSize]
+	local defaultPair = batchPlans[defaultBatchSize]
+	local defaultPlan = defaultPair and defaultPair.full
 
 	if not defaultPlan then
 		return nil
@@ -115,18 +126,26 @@ function PoisonVendor.BuildCurrentRows()
 		if merchantLine then
 			local bundleSize = merchantLine.quantity or 1
 			if bundleSize < 1 then bundleSize = 1 end
-			local supplyBatchPlans = {}
 
-			for _, batchSize in ipairs(batchSizes) do
-				local purchaseQuantity = math.ceil(batchSize / bundleSize) * bundleSize
+			local function BuildSupplyPlan(requiredUnits, exactQuantity)
+				if requiredUnits <= 0 then
+					return nil
+				end
+
+				local purchaseQuantity
+				if exactQuantity then
+					purchaseQuantity = requiredUnits
+				else
+					purchaseQuantity = math.ceil(requiredUnits / bundleSize) * bundleSize
+				end
 				local purchaseCount = purchaseQuantity / bundleSize
 				local lineCost = (merchantLine.price or 0) * purchaseCount
 				local numAvailable = merchantLine.numAvailable
 				local isLimited = type(numAvailable) == "number" and numAvailable >= 0
 				local available = not isLimited or numAvailable >= purchaseQuantity
 
-				supplyBatchPlans[batchSize] = {
-					batchSize = batchSize,
+				return {
+					batchSize = requiredUnits,
 					totalOutput = purchaseQuantity,
 					totalCost = lineCost,
 					available = available,
@@ -139,7 +158,7 @@ function PoisonVendor.BuildCurrentRows()
 							purchaseQuantity = purchaseQuantity,
 							normalizedPurchaseQuantity = purchaseQuantity,
 							purchaseCount = purchaseCount,
-							requiredUnits = batchSize,
+							requiredUnits = requiredUnits,
 							purchasedUnits = purchaseQuantity,
 							numAvailable = numAvailable,
 							price = merchantLine.price or 0,
@@ -151,8 +170,19 @@ function PoisonVendor.BuildCurrentRows()
 				}
 			end
 
+			local supplyBatchPlans = {}
+			local owned = GetBagCount(supply.itemID)
+
+			for _, batchSize in ipairs(batchSizes) do
+				local full = BuildSupplyPlan(batchSize, false)
+				local missing = math.max(0, batchSize - owned)
+				local delta = (missing > 0) and BuildSupplyPlan(missing, true) or nil
+				supplyBatchPlans[batchSize] = { full = full, delta = delta }
+			end
+
 			local defaultBatchSize = batchSizes[1]
-			local defaultPlan = supplyBatchPlans[defaultBatchSize]
+			local defaultPair = supplyBatchPlans[defaultBatchSize]
+			local defaultPlan = defaultPair and defaultPair.full
 
 			if defaultPlan then
 				rows[#rows + 1] = {
