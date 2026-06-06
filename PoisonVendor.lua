@@ -9,6 +9,10 @@ local state = PoisonVendor.state
 state.merchantOpen = false
 state.currentRows = {}
 
+function PoisonVendor.IsPlayerRogue()
+  return UnitClass and select(2, UnitClass("player")) == "ROGUE"
+end
+
 function PoisonVendor.TryExecutePurchasePlan(plan)
   if type(plan) ~= "table" then
     return false
@@ -28,7 +32,7 @@ function PoisonVendor.RefreshExpandedBatchPanels(collapseOnly)
 end
 
 function PoisonVendor.RefreshCurrentRows()
-  if not state.merchantOpen or type(PoisonVendor.BuildCurrentRows) ~= "function" then
+  if not state.merchantOpen or not PoisonVendor.IsPlayerRogue() or type(PoisonVendor.BuildCurrentRows) ~= "function" then
     state.currentRows = {}
     if type(PoisonVendor.HideVendorPanel) == "function" then
       PoisonVendor.HideVendorPanel()

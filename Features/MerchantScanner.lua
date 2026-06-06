@@ -75,6 +75,11 @@ end
 
 function PoisonVendor.BuildCurrentRows()
 	local rows = {}
+
+	if type(PoisonVendor.IsPlayerRogue) == "function" and not PoisonVendor.IsPlayerRogue() then
+		return rows
+	end
+
 	local allKnown = PoisonVendor.GetAllKnownPoisonRanks()
 	local merchantMap = PoisonVendor.BuildMerchantMap()
 	local batchSizes = PoisonVendor.GetSupportedBatchSizes and PoisonVendor.GetSupportedBatchSizes() or { 5, 10, 20, 40 }
